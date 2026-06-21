@@ -22,7 +22,7 @@ function parseArgs(argv) {
         key = a.slice(2); val = args[i + 1]; i++;
       }
       const lower = key.toLowerCase();
-      if (['runs', 'seed', 'k'].includes(lower)) val = Number(val);
+      if (['seed', 'k'].includes(lower)) val = Number(val);
       opts[lower] = val;
     } else opts._.push(a);
     i++;
@@ -41,8 +41,9 @@ function printHelp() {
   validate                           校验赛程与配置合理性
   rate                             输出各队当前 Elo 实力分与变化历史
   simulate [--runs N] [--seed S]  运行蒙特卡洛模拟并输出概率
-  scenario <matchId> <result>        手动指定某场未赛比赛结果后模拟
+  scenario <matchId> <result>        手动指定某场未赛**小组赛**结果后模拟
                                      result 格式: "2-1" 或 "1-1"
+                                     (注意: 仅支持小组赛; 淘汰赛对阵未确定暂不支持)
 
 通用选项:
   --data <path>       指定赛程 JSON 路径 (默认: data/tournament.json)
@@ -63,8 +64,15 @@ function findMatch(tournament, id) {
 }
 
 function applyScenarioResult(tournament, matchId, resultStr) {
+  for (const roundName of tournament.format.knockout.rounds) {
+    const roundMatches = tournament.knockoutBracket[roundName] || [];
+    if (roundMatches.some((x) => x.id === matchId)) {
+      throw new Error(`比赛 ${matchId} 属于淘汰赛(${roundName})，其对阵需待小组赛全部结束后才能确定。scenario 命令仅支持未赛的小组赛。`);
+    }
+  }
   const m = findMatch(tournament, matchId);
   if (!m) throw new Error(`未找到比赛: ${matchId}`);
+  if (m.stage !== 'group') throw new Error(`比赛 ${matchId} 不是小组赛，scenario 命令仅支持小组赛`);
   if (m.played) throw new Error(`比赛 ${matchId} 已进行，不能修改`);
   const m2 = { ...m };
   const parts = resultStr.split('-');
@@ -81,15 +89,14 @@ function applyScenarioResult(tournament, matchId, resultStr) {
   return { ...tournament, matches: rest };
 }
 
-function applyScenarioKnockout(tournament, matchId, resultStr) {
-  for (const roundName of tournament.format.knockout.rounds) {
-    const roundMatches = tournament.knockoutBracket[roundName] || [];
-    const found = roundMatches.find((x) => x.id === matchId);
-    if (found) {
-      throw new Error(`淘汰赛 ${matchId} 的对阵需等小组赛结束后才能确定。请对小组赛使用 scenario 命令。`);
-    }
-  }
-  return null;
+function validatePositiveIntegerRuns(runsRaw) {
+  if (runsRaw == null) return { ok: true, value: 1000 };
+  const original = String(runsRaw);
+  const n = Number(runsRaw);
+  if (!Number.isFinite(n)) return { ok: false, msg: `--runs 必须是正整数 (收到: "${original}")` };
+  if (!Number.isInteger(n)) return { ok: false, msg: `--runs 必须是整数 (收到: ${original})` };
+  if (n <= 0) return { ok: false, msg: `--runs 必须是正整数 (收到: ${original})` };
+  return { ok: true, value: n };
 }
 
 async function main() {
@@ -169,7 +176,12 @@ async function main() {
   }
 
   // ===== simulate =====
-  const runs = opts.runs || 1000;
+  const runCheck = validatePositiveIntegerRuns(opts.runs);
+  if (!runCheck.ok) {
+    console.error(runCheck.msg);
+    process.exit(1);
+  }
+  const runs = runCheck.value;
   const seed = opts.seed != null ? opts.seed : undefined;
 
   const mcResult = runMonteCarlo(tournament, {
@@ -195,7 +207,8 @@ async function main() {
         seed: mcResult.seed,
         dataFile: dataPath,
         scenario: scenarioNote,
-        totals: mcResult.totals
+        totals: mcResult.totals,
+        expected: mcResult.expected
       },
       probabilities: table,
       probs: mcResult.probs,

@@ -105,9 +105,6 @@ function simulateFullTournament(tournament, ratings, randFn) {
         finalists.add(km.away);
         champion = winner;
         runnerUp = loser;
-      } else if (roundName === rounds[rounds.length - 2]) {
-        finalists.add(km.home);
-        finalists.add(km.away);
       }
       cloneMatches.push({
         id: km.id,

@@ -214,10 +214,10 @@ function validateTournament(t) {
     });
   }
 
-  // 检查小组内是否有重复对阵（杯赛单循环通常每组只打1次）
+  // 检查小组内是否有重复对阵（杯赛单循环每组每对球队只打1次）
   playedPairKeys.forEach((ids, key) => {
     if (ids.length > 1) {
-      warnings.push(`对阵 ${key} 出现了 ${ids.length} 次 (${ids.join(', ')}): 若为单循环杯赛请确认`);
+      errors.push(`小组赛重复对阵: ${key} 出现了 ${ids.length} 次 (比赛ID: ${ids.join(', ')})`);
     }
   });
 

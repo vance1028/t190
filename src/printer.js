@@ -88,7 +88,7 @@ function printProbabilityReport(tournament, table, mcResult) {
   const align = ['right', 'left', 'left', 'right', 'right', 'right', 'right'];
   console.log(`\n===== 蒙特卡洛模拟结果 (${mcResult.runs} 次, 种子=${mcResult.seed}) =====`);
   console.log(renderTable(headers, rows, { align }));
-  console.log(`\n  概率校验: 夺冠总和=${(mcResult.totals.champion * 100).toFixed(3)}%, 决赛总和=${(mcResult.totals.final * 100).toFixed(3)}%`);
+  console.log(`\n  概率校验: 夺冠=${(mcResult.totals.champion).toFixed(4)} (期望≈${mcResult.expected.champion}), 进决赛=${(mcResult.totals.final).toFixed(4)} (期望≈${mcResult.expected.final}), 出线=${(mcResult.totals.advance).toFixed(4)} (期望=${mcResult.expected.advance})`);
 }
 
 function printValidationReport(result) {

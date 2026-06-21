@@ -48,13 +48,16 @@ function runMonteCarlo(tournament, options = {}) {
 
   const totalChamp = teamIds.reduce((s, t) => s + probs.champion[t], 0);
   const totalFinal = teamIds.reduce((s, t) => s + probs.final[t], 0);
+  const totalAdvance = teamIds.reduce((s, t) => s + probs.advance[t], 0);
+  const expectedAdvance = tournament.format.groups.count * tournament.format.groups.advancePerGroup;
 
   return {
     runs,
     seed,
     counts,
     probs,
-    totals: { champion: totalChamp, final: totalFinal },
+    totals: { champion: totalChamp, final: totalFinal, advance: totalAdvance },
+    expected: { champion: 1, final: 2, advance: expectedAdvance },
     ratingSnapshot: { ...ratings }
   };
 }
