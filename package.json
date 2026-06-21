@@ -1,0 +1,19 @@
+{
+  "name": "tournament-simulator",
+  "version": "1.0.0",
+  "description": "Cup tournament Monte Carlo simulator with Elo ratings",
+  "main": "index.js",
+  "bin": {
+    "tourney": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js validate && node index.js simulate --runs 1000 --seed 42"
+  },
+  "keywords": ["tournament", "monte-carlo", "elo", "simulation", "football"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  }
+}

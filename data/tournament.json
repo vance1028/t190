@@ -1,0 +1,53 @@
+{
+  "name": "示例杯赛 2026",
+  "format": {
+    "groups": {
+      "count": 2,
+      "advancePerGroup": 2
+    },
+    "knockout": {
+      "type": "single-elimination",
+      "rounds": ["semifinal", "final"]
+    },
+    "tiebreakers": ["points", "goalDiff", "h2hPoints", "h2hGoalDiff", "goalsFor"],
+    "pointsForWin": 3,
+    "pointsForDraw": 1
+  },
+  "teams": [
+    { "id": "BRA", "name": "巴西",     "baseRating": 130 },
+    { "id": "ARG", "name": "阿根廷", "baseRating": 125 },
+    { "id": "FRA", "name": "法国",     "baseRating": 120 },
+    { "id": "GER", "name": "德国",     "baseRating": 118 },
+    { "id": "ENG", "name": "英格兰",   "baseRating": 115 },
+    { "id": "ESP", "name": "西班牙",   "baseRating": 112 },
+    { "id": "POR", "name": "葡萄牙",   "baseRating": 108 },
+    { "id": "NED", "name": "荷兰",     "baseRating": 105 }
+  ],
+  "groups": {
+    "A": ["BRA", "FRA", "ESP", "NED"],
+    "B": ["ARG", "GER", "ENG", "POR"]
+  },
+  "matches": [
+    { "id": "M01", "date": "2026-06-10", "stage": "group", "group": "A", "home": "BRA", "away": "NED", "homeScore": 2, "awayScore": 0, "played": true  },
+    { "id": "M02", "date": "2026-06-10", "stage": "group", "group": "A", "home": "FRA", "away": "ESP", "homeScore": 1, "awayScore": 1, "played": true  },
+    { "id": "M03", "date": "2026-06-11", "stage": "group", "group": "B", "home": "ARG", "away": "POR", "homeScore": 3, "awayScore": 1, "played": true  },
+    { "id": "M04", "date": "2026-06-11", "stage": "group", "group": "B", "home": "GER", "away": "ENG", "homeScore": 0, "awayScore": 2, "played": true  },
+    { "id": "M05", "date": "2026-06-14", "stage": "group", "group": "A", "home": "BRA", "away": "ESP", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M06", "date": "2026-06-14", "stage": "group", "group": "A", "home": "NED", "away": "FRA", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M07", "date": "2026-06-15", "stage": "group", "group": "B", "home": "ARG", "away": "ENG", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M08", "date": "2026-06-15", "stage": "group", "group": "B", "home": "POR", "away": "GER", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M09", "date": "2026-06-18", "stage": "group", "group": "A", "home": "FRA", "away": "BRA", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M10", "date": "2026-06-18", "stage": "group", "group": "A", "home": "ESP", "away": "NED", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M11", "date": "2026-06-19", "stage": "group", "group": "B", "home": "GER", "away": "ARG", "homeScore": null, "awayScore": null, "played": false },
+    { "id": "M12", "date": "2026-06-19", "stage": "group", "group": "B", "home": "ENG", "away": "POR", "homeScore": null, "awayScore": null, "played": false }
+  ],
+  "knockoutBracket": {
+    "semifinal": [
+      { "id": "SF1", "date": "2026-06-24", "slot1": { "group": "A", "position": 1 }, "slot2": { "group": "B", "position": 2 } },
+      { "id": "SF2", "date": "2026-06-24", "slot1": { "group": "B", "position": 1 }, "slot2": { "group": "A", "position": 2 } }
+    ],
+    "final": [
+      { "id": "F1",  "date": "2026-06-28", "slot1": { "match": "SF1", "winner": true  }, "slot2": { "match": "SF2", "winner": true  } }
+    ]
+  }
+}
